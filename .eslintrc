@@ -1,0 +1,64 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "next/core-web-vitals", // Next.js specific rules
+    "eslint:recommended", // General recommended rules
+    "plugin:react/recommended", // React rules
+    "plugin:react-hooks/recommended", // Hooks rules
+    "plugin:@typescript-eslint/recommended", // TypeScript rules
+    "plugin:jsx-a11y/recommended", // Accessibility rules
+    "prettier" // Prettier integration
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "jsx-a11y"],
+  "rules": {
+    /* General Best Practices */
+    "no-console": ["warn", { "allow": ["warn", "error"] }], // Warn for console logs
+    "no-debugger": "error", // Prevent debugger usage
+
+    /* React-Specific Rules */
+    "react/react-in-jsx-scope": "off", // Not required for Next.js
+    "react/jsx-props-no-spreading": "off", // Allow prop spreading
+    "react/prop-types": "off", // Disabled because of TypeScript
+    "react/jsx-no-target-blank": ["error", { "allowReferrer": true }], // Ensure secure external links
+
+    /* React Hooks */
+    "react-hooks/rules-of-hooks": "error", // Enforce Hooks rules
+    "react-hooks/exhaustive-deps": "warn", // Validate dependencies of Hooks
+
+    /* TypeScript Rules */
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }], // Ignore unused variables prefixed with _
+    "@typescript-eslint/explicit-module-boundary-types": "off", // Relax explicit return types
+    "@typescript-eslint/no-explicit-any": "warn", // Warn for `any` type usage
+    "@typescript-eslint/consistent-type-imports": "error", // Enforce consistent type imports
+
+    /* Accessibility Rules */
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["hrefLeft", "hrefRight"],
+        "aspects": ["invalidHref", "preferButton"]
+      }
+    ],
+
+    /* Prettier Integration */
+    "prettier/prettier": "error" // Enforce Prettier formatting
+  },
+  "settings": {
+    "react": {
+      "version": "detect" // Automatically detect the React version
+    }
+  }
+}
