@@ -1,53 +1,37 @@
-import { useEffect, useState } from 'react'
 import { ChevronDown, CircleDotDashed, FileText, LayoutDashboard, LayoutList, Settings, UserCog, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router';
-import { AxiosInstance } from '../../Auth/Interceptor';
+import { useAuth } from '../../hooks/auth';
 
 export default function Sidebar({ isSidebarHidden }) {
-  const sidebarItems = [
-    { link: '/dashboard', icon: <LayoutDashboard />, label: 'Dashboard' },
-    {
-      link: '/documents',
-      icon: <FileText />,
-      label: 'Templates',
-      // subItems: [
-      //   { link: '/documents', icon: <CircleDotDashed size={12} />, label: 'List' },
-      //   { link: '/documents/add', icon: <CircleDotDashed size={12} />, label: 'Upload New' }
-      // ]
-    },
-    { link: '/users', icon: <Users />, label: 'Users' },
-    { link: '/roles', icon: <UserCog />, label: 'Role Management' },
-    { link: '/logs', icon: <LayoutList />, label: 'Logs' },
-    {
-      link: '/settings', icon: <Settings />, label: 'Settings',
-      subItems: [
-        { link: '/settings/logo', icon: <CircleDotDashed size={12} />, label: 'Logo' },
-        // { link: '/settings/template-category', icon: <CircleDotDashed size={12} />, label: 'Template Category' },
-        // { link: '/settings', icon: <CircleDotDashed size={12} />, label: 'MS Azure Sync' },
-        { link: '/settings', icon: <CircleDotDashed size={12} />, label: 'MS Active Directory' },
-        { link: '/settings/exchange-server', icon: <CircleDotDashed size={12} />, label: 'MS Exchange Server' },
-        { link: '/settings/ms-ad-sync', icon: <CircleDotDashed size={12} />, label: 'Synchronization' },
-      ]
-
-    }
-  ];
-  const [logo, setLogo] = useState({});
+  const { useMSAzureSettings } = useAuth()
+  const [sidebarItems, setSidebarItems] = useState([])
   useEffect(() => {
-    // setLogo(JSON.parse(localStorage.getItem('logo')))
-
-  }, [])
+    setSidebarItems([
+      { link: '/dashboard', icon: <LayoutDashboard />, label: 'Dashboard' },
+      {
+        link: '/documents',
+        icon: <FileText />,
+        label: 'Templates',
+      },
+      { link: '/users', icon: <Users />, label: 'Users' },
+      { link: '/roles', icon: <UserCog />, label: 'Role Management' },
+      { link: '/logs', icon: <LayoutList />, label: 'Logs' },
+      {
+        link: '/settings', icon: <Settings />, label: 'Settings',
+        subItems: [
+          { link: '/settings/logo', icon: <CircleDotDashed size={12} />, label: 'Logo' },
+          { link: '/settings', icon: <CircleDotDashed size={12} />, label: 'MS Active Directory' },
+          { link: '/settings/exchange-server', icon: <CircleDotDashed size={12} />, label: 'MS Exchange Server' },
+        ].concat(useMSAzureSettings ? [{ link: '/settings/ms-ad-sync', icon: <CircleDotDashed size={12} />, label: 'Synchronization' },] : [])
+      }
+    ]);
+  }, [useMSAzureSettings])
   return (
     <div>
       {/* Sidebar content */}
       <div className="overflow-y-auto overflow-x-hidden flex-grow">
         <ul className="flex flex-col py-4 space-y-1">
-          {/* <li className="px-5">
-            <div className="flex flex-row items-center h-8 mb-2 mt-2">
-              <div className="text-sm font-light tracking-wide text-gray-200 w-full">
-                <img src={`${Api_base_url}/${logo}`}  alt="logo" className='m-auto max-h-[50px]' />
-              </div>
-            </div>
-          </li> */}
           {sidebarItems.map((item, index) => (
             <SidebarItem key={index} link={item.link} icon={item.icon} label={item.label} subItems={item.subItems} />
           ))}
@@ -58,8 +42,8 @@ export default function Sidebar({ isSidebarHidden }) {
 }
 
 const SidebarItem = ({ icon, label, link, subItems }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
 
+  const [isExpanded, setIsExpanded] = useState(false);
   const toggleSubItems = (e) => {
     // e.preventDefault(); // Prevent navigating if the chevron is clicked
     setIsExpanded(!isExpanded);

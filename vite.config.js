@@ -1,6 +1,6 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import ReactComplier from "babel-plugin-react-compiler";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import ReactComplier from 'babel-plugin-react-compiler';
 import fs from 'fs';
 import path from 'path';
 
@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     https: {
       key: fs.readFileSync(path.resolve(__dirname, 'certs/localhost-key.pem')), // Your SSL key
-      cert: fs.readFileSync(path.resolve(__dirname, 'certs/localhost-cert.pem')), // Your SSL certificate
+      cert: fs.readFileSync(path.resolve(__dirname, 'certs/localhost-cert.pem')) // Your SSL certificate
     },
     host: '0.0.0.0', // Allow external access
     port: 5173
@@ -17,8 +17,11 @@ export default defineConfig({
   plugins: [
     react({
       babel: {
-        plugins: [ReactComplier],
-      },
-    }),
+        plugins: [ReactComplier]
+      }
+    })
   ],
+  build: {
+    target: 'es2022' // Ensure this matches an environment that supports top-level await
+  }
 });

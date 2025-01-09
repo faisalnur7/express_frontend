@@ -1,22 +1,21 @@
 import { BrowserRouter, Route, Routes } from "react-router";
+import { ToastContainer } from "react-toastify";
+import './App.css';
 import { AuthProvider } from "./Auth/AuthContext.jsx";
 import ProtectedRoute from "./Auth/PrivateRoute.jsx";
 import Layout from "./components/Layout/index.jsx";
+import ApiLogs from "./pages/ApiLogs.jsx";
 import Dashboard from "./pages/Dashboard";
 import DocumentList from "./pages/documents";
-import AddNewDoc from "./pages/documents/AddNewDoc";
 import Login from "./pages/Login";
-import './App.css';
-import { ToastContainer } from "react-toastify";
-import Users from "./pages/users/index.jsx";
+import MyProfile from "./pages/MyProfile.jsx";
+import RoleManagement from "./pages/role_management/index.jsx";
 import MicrosoftActiveDirectorySettings from "./pages/settings/index.jsx";
 import LogoSetting from "./pages/settings/LogoSetting.jsx";
-import MyProfile from "./pages/MyProfile.jsx";
-import ApiLogs from "./pages/ApiLogs.jsx";
 import MSADSync from "./pages/settings/MSADSync.jsx";
 import MsExServer from "./pages/settings/MsExServer.jsx";
 import TemplateCategory from "./pages/settings/TemplateCategory.jsx";
-import RoleManagement from "./pages/role_management/index.jsx";
+import Users from "./pages/users/index.jsx";
 function App() {
 
   return <AuthProvider>
@@ -36,7 +35,6 @@ function App() {
 
             <Route path="documents" >
               <Route index element={<DocumentList />} />
-              {/* <Route path="add" element={<AddNewDoc />} /> */}
             </Route>
             <Route path="settings" >
               <Route index element={<MicrosoftActiveDirectorySettings />} />

@@ -9,7 +9,7 @@ import { fireToast } from '../../utils/toastify';
 
 export default function RoleManagement() {
   // const navigate = useNavigate()
-  const { setUiLoader } = useAuth()
+  const { setUiLoader, useMSAzureSettings } = useAuth()
   const [Roleuments, setRoleuments] = useState([]);
   const [currentRoles, setCurrentRoles] = useState([]);
   const [RoleDetails, setRoleDetails] = useState({ isEditMode: false, _id: '', name: '', isActive: true });
@@ -98,7 +98,7 @@ export default function RoleManagement() {
         <h1 className="text-2xl font-bold">Roles</h1>
         <div className="flex gap-4">
           <button className="btn btn-primary text-white" onClick={createRole}>Add New Role</button>
-          <button className="btn btn-primary bg-black text-white" onClick={syncRoles}>Sync Roles!</button>
+          {useMSAzureSettings && <button className="btn btn-primary bg-black text-white" onClick={syncRoles}>Sync Roles!</button>}
         </div>
       </div>
       <AddNewRole RoleDetails={RoleDetails} setRoleDetails={setRoleDetails} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} setRefetchRoles={setRefetchRoles} />

@@ -2,15 +2,15 @@ import Cookies from 'js-cookie';
 import { Eye, EyeOff } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useAuth } from '../hooks/auth';
-import { fireToast } from '../utils/toastify';
 import { AxiosInstance } from '../Auth/Interceptor';
-import { Api_base_url } from '../utils/ApiConfigs';
 import AzureLogin from '../components/Login/AzureLogin';
+import { useAuth } from '../hooks/auth';
+import { Api_base_url } from '../utils/ApiConfigs';
+import { fireToast } from '../utils/toastify';
 
 export default function Login() {
   let navigate = useNavigate();
-  const { setIsAuthenticated } = useAuth()
+  const { setIsAuthenticated, useMSAzureSettings } = useAuth()
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -126,8 +126,10 @@ export default function Login() {
             >
               {loading ? "Logging in..." : "Login"}
             </button>
-            <div className="divider">OR</div>
-            <AzureLogin loading={loading} />
+            {useMSAzureSettings && <div>
+              <div className="divider">OR</div>
+              <AzureLogin loading={loading} />
+            </div>}
           </form>
         </div>
       </div>

@@ -2,12 +2,15 @@ import { useEffect, useState } from "react"
 import { AxiosInstance } from "../../Auth/Interceptor";
 import { fireToast } from "../../utils/toastify";
 import { Api_base_url } from "../../utils/ApiConfigs";
+import { useAuth } from "../../hooks/auth";
 
 export default function MicrosoftActiveDirectorySettings() {
+  const { setUseMSAzureSettings } = useAuth()
   const [formData, setformData] = useState({
     id: '',
     isActivate: false,
     isIncludeDomain: false,
+    isAzureActivated: false,
 
     smtp_server: '',
     port_number_default_25: '',
@@ -59,7 +62,9 @@ export default function MicrosoftActiveDirectorySettings() {
     AxiosInstance.post(`${Api_base_url}/api/microsoft_ad`, formData)
       .then((response) => {
         console.log(response.data.data);
+        setUseMSAzureSettings(formData.isAzureActivated)
         fireToast('success', 'Microsoft Azure settings updated successfully')
+
       })
       .catch((error) => {
         console.error(error.message);
@@ -83,15 +88,12 @@ export default function MicrosoftActiveDirectorySettings() {
                 required
               />
             </div>)}
-            {/* <div className="form-control">
-              <label htmlFor="title" className="label">
-                <span className="label-text">{'Include Domain'}</span>
-              </label>
+            <div className="form-control">
               <label className="label cursor-pointer">
-                <span className="label-text">Include Domain</span>
-                <input type="checkbox" className="checkbox" checked={formData.isIncludeDomain} onChange={(e) => setformData(f => { return { ...f, isIncludeDomain: e.target.checked } })} />
+                <span className="label-text">Use Microsoft Azure Settings</span>
+                <input type="checkbox" className="checkbox" checked={formData.isAzureActivated} onChange={(e) => setformData(f => { return { ...f, isAzureActivated: e.target.checked } })} />
               </label>
-            </div> */}            
+            </div>            
           </div>
           
         </div>

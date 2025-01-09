@@ -1,6 +1,5 @@
 import axios, { AxiosInstance as AxiosInstanceType } from 'axios';
 import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router';
 import { fireToast } from '../utils/toastify';
 // Axios Interceptor Instance
 export const AxiosInstance: AxiosInstanceType = axios.create({
@@ -25,14 +24,13 @@ AxiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (error.response && error?.response?.data?.error === 'Unauthorized user') {
       fireToast('error', 'Session Expired Please login again');
-      // Clear the authentication token
-      Cookies.remove('auth_token');
-      localStorage.clear()
-      // Redirect to login page
-      const navigate = useNavigate();
-      navigate('/login');
+      setTimeout(() => {
+        Cookies.remove('auth_token');
+        localStorage.clear();
+        window.location.href = '/login';
+      }, 800);
     }
     // Handle response errors here
     return Promise.reject(error);

@@ -1,9 +1,9 @@
-import nacl from "tweetnacl";
-import naclUtil from "tweetnacl-util";
+import nacl from 'tweetnacl';
+import naclUtil from 'tweetnacl-util';
 
-const SECRET_KEY = 'msad';  // Use the same secret key as in the backend
-const hash = nacl.hash(naclUtil.decodeUTF8(SECRET_KEY));  // Hash the key using nacl.hash
-const paddedSecretKey = hash.slice(0, 32); 
+const SECRET_KEY = 'msad'; // Use the same secret key as in the backend
+const hash = nacl.hash(naclUtil.decodeUTF8(SECRET_KEY)); // Hash the key using nacl.hash
+const paddedSecretKey = hash.slice(0, 32);
 export const Api_base_url = 'http://localhost:5000';
 
 // Decrypt function
@@ -26,7 +26,7 @@ export const msalConfig = async () => {
     if (!response.ok) {
       throw new Error('Failed to fetch Azure AD configuration');
     }
-    
+
     const jsonResponse = await response.json();
     const encryptedData = jsonResponse?.data;
 
@@ -41,13 +41,34 @@ export const msalConfig = async () => {
       auth: {
         clientId: authConfig.client_id,
         authority: `https://login.microsoftonline.com/${authConfig.azure_tenant}`,
-        redirectUri: "http://localhost:5173/dashboard", // Replace with your desired redirect URI
+        redirectUri: 'http://localhost:5173/dashboard' // Replace with your desired redirect URI
       },
       cache: {
-        cacheLocation: "sessionStorage", // Store tokens in sessionStorage
-        storeAuthStateInCookie: false,
-      },
+        cacheLocation: 'sessionStorage', // Store tokens in sessionStorage
+        storeAuthStateInCookie: false
+      }
     };
+  } catch (error) {
+    console.error('Error fetching MSAL configuration:', error);
+    throw error;
+  }
+};
+export const isAzureActivated = async () => {
+  try {
+    const response = await fetch(`${Api_base_url}/api/mad`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch Azure AD configuration');
+    }
+
+    const jsonResponse = await response.json();
+    const encryptedData = jsonResponse?.data;
+
+    if (!encryptedData) {
+      throw new Error('No encrypted data received');
+    }
+    // Decrypt the data
+    const authConfig = decrypt(encryptedData);
+    return authConfig.isAzureActivated;
   } catch (error) {
     console.error('Error fetching MSAL configuration:', error);
     throw error;
@@ -55,5 +76,5 @@ export const msalConfig = async () => {
 };
 
 export const loginRequest = {
-  scopes: ["User.Read"], // Permissions you requested in Azure AD
+  scopes: ['User.Read'] // Permissions you requested in Azure AD
 };
